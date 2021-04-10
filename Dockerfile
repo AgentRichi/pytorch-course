@@ -21,7 +21,7 @@ RUN conda install -c conda-forge --quiet --yes --file /tmp/requirements.txt \
 # create CPU enviroment
 RUN conda env create --quiet -f /tmp/pytorch_course_env.yml \
     && source ${CONDA_DIR}/etc/profile.d/conda.sh \
-    && conda activate /home/$NB_USER/conda_envs/pytorchenv \
+    && conda activate pytorchenv \
     && python -m ipykernel install --user --name=pytorchenv \
     && conda clean --all -f -y \
     && fix-permissions "${CONDA_DIR}" \
@@ -30,7 +30,7 @@ RUN conda env create --quiet -f /tmp/pytorch_course_env.yml \
 # create GPU enviroment
 RUN conda env create --quiet -f /tmp/pytorch_gpu_course_env.yml \
     && source ${CONDA_DIR}/etc/profile.d/conda.sh \
-    && conda activate /home/$NB_USER/conda_envs/pytorchenv_gpu \
+    && conda activate pytorchenv_gpu \
     && python -m ipykernel install --user --name=pytorchenv_gpu \
     && conda clean --all -f -y \
     && fix-permissions "${CONDA_DIR}" \
