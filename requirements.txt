@@ -1,0 +1,4 @@
+ipykernel=5.5.3
+jupyter_server=1.5.1
+jupyter-lsp=1.1.4
+python-language-server=0.36.2
