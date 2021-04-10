@@ -11,10 +11,14 @@ RUN fix-permissions $CONDA_DIR
 
 USER $NB_UID
 
-# install python packages and jupyterlab extensions
+# install python packages and jupyterlab lsp extensions
 RUN conda install -c conda-forge --quiet --yes --file /tmp/requirements.txt \
+    && jupyter labextension install --no-build '@krassowski/jupyterlab-lsp@3.5.0' \
+    && jupyter lab build --dev-build=False --minimize=True \
     && conda clean --all -f -y \
     && rm -rf \
+      $CONDA_DIR/share/jupyter/lab/staging \
+      /home/$NB_USER/.cache/yarn \
     && fix-permissions "${CONDA_DIR}" \
     && fix-permissions /home/$NB_USER
 
@@ -39,6 +43,12 @@ RUN conda env create --quiet -f /tmp/pytorch_gpu_course_env.yml \
 # add local repo
 RUN mkdir /home/${NB_USER}/pytorch-course
 COPY --chown=$NB_UID . /home/${NB_USER}/pytorch-course
+
+# symbiotic links, required for jumping to source code
+RUN mkdir /home/${NB_USER}/.lsp_symlink \
+    && cd /home/${NB_USER}/.lsp_symlink \
+    && mkdir -p opt/conda/lib \
+    && ln -s /opt/conda/lib/python3.8 opt/conda/lib/python3.8
 
 # add git global config
 RUN git config --global user.email "rossmann.richard@gmail.com" \
